@@ -123,9 +123,8 @@ class App(QWidget):
         options |= QFileDialog.DontUseNativeDialog
         self.dirpath = str(QFileDialog.getExistingDirectory(self, "Select Directory", options=options))
         if self.dirpath:
-            # config.log_q.put("Top level folder:\n{}".format(self.dirpath))
             self.log_q.put("Top level folder:\n{}".format(self.dirpath))
-            # logging.info("Top level folder:\n{}".format(self.dirpath))
+            logging.info("Top level folder:\n{}".format(self.dirpath))
 
     @pyqtSlot(str)
     def output_logs(self, msg):
@@ -146,7 +145,7 @@ class App(QWidget):
     def loop_logger(self):
         # Run this forever while main program is running. Should work?
         # loop flag is set from the main thread to determine when to stop looping for queue log
-        config.dbglog.debug("Entering loop logger")
+        # config.dbglog.debug("Entering loop logger")
 
         # printonce = True
         looping = True
@@ -155,7 +154,7 @@ class App(QWidget):
             # Get flag from thread_logger. This will return false when it receives None as a message
             looping = self.threadlog.thread_logger()
             # printonce = False
-        print("loop has ended")
+        # print("loop has ended")
 
     def start_run(self):
         """Runs the script to merge data and plot based on user's selections"""
@@ -208,24 +207,6 @@ class QTextEditLogger(logging.Handler):
         # Add a newline after every output to make the wrapped text more readable
         self.widget.append("\n")
 
-#
-# def loop_logger(log_q):
-#     # Run this forever while main program is running. Should work?
-#     # loop flag is set from the main thread to determine when to stop looping for queue log
-#     config.dbglog.debug("Entering loop logger")
-#
-#     # print("looping_logger q object {}".format(log_q))
-#     logger = compile_data.LogThread(log_q)
-#
-#     # printonce = True
-#     looping = True
-#     while looping:
-#         time.sleep(0.1)
-#         # Get flag from thread_logger. This will return false when it receives None as a message
-#         looping = logger.thread_logger()
-#         # printonce = False
-#     print("loop has ended")
-
 def main():
     log_q = multiprocessing.Queue()
 
@@ -234,11 +215,7 @@ def main():
     return sys.exit(app.exec_())
 
 if __name__ == '__main__':
-    # t = threading.Thread(target=loop_logger)
-    # t.start()
-    # t.run()
+    logging.basicConfig(level = logging.INFO)
     main()
     # config.loop_flag = False
 
-    # main_t = threading.main_thread()
-    # main_t.run()

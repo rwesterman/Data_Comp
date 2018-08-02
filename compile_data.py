@@ -481,15 +481,11 @@ class CombinedData():
 
         plt.title("Total Power Draw vs {}".format(self.mode))
 
-        # plt.show()
-
         save_path = os.path.join(self.dirpath, "Power_and_BW.png")
-        # plt.show()
 
-        
         # Put the message in the queue in order to print it out immediately
         self.log_q.put("Saving Power_and_Bandwidth at {}".format(save_path))
-        # logging.info("Saving Power_and_Bandwidth at {}".format(save_path))
+        logging.info("Saving Power_and_Bandwidth at {}".format(save_path))
 
         plt.savefig(save_path, dpi='figure', format="png")
 
@@ -533,7 +529,7 @@ class CombinedData():
         
 
         self.log_q.put("Saving drive_temp_vs_write at {}".format(save_path))
-        # logging.info("Saving drive_temp_vs_write at {}".format(save_path))
+        logging.info("Saving drive_temp_vs_write at {}".format(save_path))
 
         plt.savefig(save_path, dpi='figure')
 
@@ -584,14 +580,10 @@ class CombinedData():
 
         plt.title("Drive Temperature vs Ambient Temperature")
 
-        # plt.show()
         save_path = os.path.join(self.dirpath, "Drive_Temp_vs_Ambient.png")
 
-        
-
-
-        self.log_q.put("Saving Drive_Temp_vs_Ambient at ()".format(save_path))
-        # logging.info("Saving drive_temp_vs_ambient at {}".format(save_path))
+        self.log_q.put("Saving Drive_Temp_vs_Ambient at {}".format(save_path))
+        logging.info("Saving drive_temp_vs_ambient at {}".format(save_path))
         plt.savefig(save_path, dpi='figure')
 
     def power_vs_bw(self):
@@ -655,15 +647,12 @@ class CombinedData():
         plt.plot(pow_df[self.mode], fit_fn(pow_df[self.mode]), '-')
         plt.title("Power Draw vs Bandwidth".format(self.mode))
 
-        # plt.show()
 
         save_path = os.path.join(self.dirpath, "Power_vs_Bandwidth.png")
-        # plt.show()
-
 
         # Put the message in the queue in order to print it out immediately
         self.log_q.put("Saving Power_vs_Bandwidth at {}".format(save_path))
-        # logging.info("Saving Power_vs_Bandwidth at {}".format(save_path))
+        logging.info("Saving Power_vs_Bandwidth at {}".format(save_path))
 
         plt.savefig(save_path, dpi='figure', format="png")
 
@@ -695,18 +684,14 @@ def bw_vs_power(smart_path, pow3_path, pow12_path, log_q):
 def plot_data(log_q, plot_power=True, plot_throttle=True, plot_temps=True, dirpath=os.getcwd()):
     """Walks directories, finds all csv data, then sorts into dataframes and plots"""
 
-    # config.loop_flag = True
-
     # paths holds the filepaths for each type of data
     paths = get_filepaths.get_csv_paths(dirpath)
     # paths becomes a list of dicts, where each element of the list holds a dict with direct links to full filepath for each type of data
     paths = get_filepaths.filter_data(paths)
-    # logging.info("All paths here:\n{}".format(paths))
     print("plot_data q object {}".format(log_q))
     log_q.put("Running...")
-    # logging.info("Running...")
+    logging.info("Running...")
 
-    # logging.info("Running...")
     # for each "test" in paths create dataframes and plots (where a test is a particular setup ie 1085_fans_high_heaters_on_5G)
     for test in paths:
 
@@ -750,7 +735,7 @@ def plot_data(log_q, plot_power=True, plot_throttle=True, plot_temps=True, dirpa
             power_df = power.get_total_power()
         except KeyError as e:
             log_q.put("No Power data for {}".format(dirpath))
-            # logging.info("No Power data for {}".format(dirpath))
+            logging.info("No Power data for {}".format(dirpath))
             power_df = None
 
         # Now accounts for missing thermal data
@@ -770,13 +755,15 @@ def plot_data(log_q, plot_power=True, plot_throttle=True, plot_temps=True, dirpa
             alldata.plot_power()
             alldata.power_vs_bw()
 
+        plt.clf()
+
         comb_data_path = os.path.join(dirpath, "Combined_Data.csv")
         log_q.put("Outputting combined data to {}".format(comb_data_path))
-        # logging.info("Outputting combined data to {}".format(comb_data_path))
+        logging.info("Outputting combined data to {}".format(comb_data_path))
         alldata.output_comb_df(comb_data_path)
 
     log_q.put("Finished!")
-    # logging.info("Finished!")
+    logging.info("Finished!")
 
 
 class LogThread(QThread):
