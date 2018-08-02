@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+matplotlib = "*"
+numpy = "*"
+"pyqt5" = "*"
+pandas = "*"
+
+[dev-packages]
+pyinstaller = "*"
+"pypiwin32" = "*"
+cython = "*"
+
+[requires]
+python_version = "3.6"

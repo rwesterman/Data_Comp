@@ -1,0 +1,9 @@
+*.idea*
+*pycache*
+.idea/misc.xml
+*.pyc
+.idea/workspace.xml
+
+.idea/misc.xml
+
+.idea/Data_Comp_8267.iml
